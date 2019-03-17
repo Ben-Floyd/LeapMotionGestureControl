@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.438
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerPointAdd-in", "PowerPointAdd-in\PowerPointAdd-in.csproj", "{4C476569-9147-4E39-BC80-0C3305C25353}"
+	ProjectSection(ProjectDependencies) = postProject
+		{57BFA5BB-8747-47A1-B16A-F60783C6B092} = {57BFA5BB-8747-47A1-B16A-F60783C6B092}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestureMap", "GestureMap\GestureMap.csproj", "{57BFA5BB-8747-47A1-B16A-F60783C6B092}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestureManager", "GestureManager\GestureManager.csproj", "{00A2D73E-3F93-4671-AD5C-B433E232E82D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{57BFA5BB-8747-47A1-B16A-F60783C6B092} = {57BFA5BB-8747-47A1-B16A-F60783C6B092}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4C476569-9147-4E39-BC80-0C3305C25353}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C476569-9147-4E39-BC80-0C3305C25353}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C476569-9147-4E39-BC80-0C3305C25353}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C476569-9147-4E39-BC80-0C3305C25353}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{57BFA5BB-8747-47A1-B16A-F60783C6B092}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57BFA5BB-8747-47A1-B16A-F60783C6B092}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57BFA5BB-8747-47A1-B16A-F60783C6B092}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{57BFA5BB-8747-47A1-B16A-F60783C6B092}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{00A2D73E-3F93-4671-AD5C-B433E232E82D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00A2D73E-3F93-4671-AD5C-B433E232E82D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00A2D73E-3F93-4671-AD5C-B433E232E82D}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{00A2D73E-3F93-4671-AD5C-B433E232E82D}.Release|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B5130659-BCE7-4415-8253-198B66377BF5}
+	EndGlobalSection
+EndGlobal
