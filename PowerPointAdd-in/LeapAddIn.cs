@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Xml.Linq;
 using PowerPoint = Microsoft.Office.Interop.PowerPoint;
 using Office = Microsoft.Office.Core;
@@ -9,63 +11,59 @@ using Office = Microsoft.Office.Core;
 namespace LeapMotionPowerPointAdd_in
 {
 
-    public partial class ThisAddIn
+    public partial class LeapAddIn
     {
-        private LeapMotionGestureMap.GestureMap gestureMap;
-
+        private static readonly object slideShowLock = new object();
         private bool slideShowRunnning;
-
-        private Object thisLock = new Object();
+        private Thread show;
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             slideShowRunnning = false;
-            gestureMap = new LeapMotionGestureMap.GestureMap();
+            LeapMotionGestureMap.GestureMap.Init();
 
             Application.SlideShowBegin +=
-                new PowerPoint.EApplication_SlideShowBeginEventHandler(
-                    SlideShowStart);
+                new PowerPoint.EApplication_SlideShowBeginEventHandler(SlideShowStart);
 
             Application.SlideShowEnd +=
-                new PowerPoint.EApplication_SlideShowEndEventHandler(
-                    SlideShowEnd);
-
-            Application.PresentationNewSlide +=
-                new PowerPoint.EApplication_PresentationNewSlideEventHandler(
-                NewSlide);
+                new PowerPoint.EApplication_SlideShowEndEventHandler(SlideShowEnd);
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
         {
         }
 
-        void NewSlide(PowerPoint.Slide slide)
-        {
-            PowerPoint.Shape textBox = slide.Shapes.AddTextbox(
-                Office.MsoTextOrientation.msoTextOrientationHorizontal, 0, 0, 500, 50);
-            textBox.TextFrame.TextRange.InsertAfter("Hello");
-        }
-
         void SlideShowStart(PowerPoint.SlideShowWindow window)
         {
             slideShowRunnning = true;
-
-            while (slideShowRunnning)
-            {
-                if ((LeapMotionGestureMap.GestureMap.standardGestures != null) 
-                    && !(LeapMotionGestureMap.GestureMap.standardGestures.IsEmpty))
-                {
-                    foreach(Leap.Gesture gesture in LeapMotionGestureMap.GestureMap.standardGestures)
-                    {
-                        HandleGesture(gesture);
-                    }
-                }
-            }
+            show = new Thread(slideShow);
+            show.Start();
         }
 
         void SlideShowEnd(PowerPoint.Presentation presentation)
         {
+            Debug.WriteLine("Slide Show Ended");
             slideShowRunnning = false;
+            show.Join();
+        }
+
+        void slideShow ()
+        {
+            lock (slideShowLock)
+            {
+                while (slideShowRunnning)
+                {
+                    Leap.GestureList gestures = LeapMotionGestureMap.GestureMap.GetGestures();
+                    if ((gestures != null)
+                        && !(gestures.IsEmpty))
+                    {
+                        foreach (Leap.Gesture gesture in gestures)
+                        {
+                            HandleGesture(gesture);
+                        }
+                    }
+                }
+            }
         }
 
         void HandleGesture(Leap.Gesture gesture)
@@ -76,12 +74,15 @@ namespace LeapMotionPowerPointAdd_in
 
                 if (gesture.State.Equals(Leap.Gesture.GestureState.STATESTOP))
                 {
+                    Debug.WriteLine("SWIPE");
                     if (swipe.Direction.x > 0)
                     {
+                        Debug.WriteLine("Next");
                         Application.ActivePresentation.SlideShowWindow.View.Next();
                     }
-                    else if (!Application.ActivePresentation.SlideShowWindow.View.CurrentShowPosition.Equals(0))
+                    else
                     {
+                        Debug.WriteLine("Prev");
                         Application.ActivePresentation.SlideShowWindow.View.Previous();
                     }
                 }
