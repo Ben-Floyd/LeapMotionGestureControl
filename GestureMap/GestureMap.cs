@@ -5,55 +5,65 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Leap;
 
 namespace LeapMotionGestureMap
 {
-
-    public static class GestureMap
+    public class GestureMap : Leap.Listener
     {
         private static readonly object consoleLock = new object();
 
-        private static Leap.Controller controller = null;
-        private static Leap.GestureList standardGestures = null;
-        private static LeapListener listener = null;
+        private Leap.Controller controller = null;
+        private Leap.GestureList standardGestures;
+        public event EventHandler<SwipeEvent> SwipeDetected;
 
-        public static void Init()
+        public GestureMap()
         {
+            standardGestures = null;
             controller = new Leap.Controller();
-            listener = new LeapListener();
 
             controller.EnableGesture(Leap.Gesture.GestureType.TYPE_SWIPE);
-            controller.AddListener(listener);
+            controller.AddListener(this);
         }
 
-        public static Leap.GestureList GetGestures()
+        ~GestureMap()
         {
-            return standardGestures;
+            controller.RemoveListener(this);
+            controller.Dispose();
         }
 
-        class LeapListener : Leap.Listener
+        public override void OnFrame(Leap.Controller controller)
         {
-            public override void OnFrame(Controller controller)
+            Leap.Frame frame = controller.Frame();
+
+            standardGestures = frame.Gestures();
+
+            foreach (Leap.Gesture gesture in standardGestures)
             {
-                Leap.Frame frame = controller.Frame();
-
-                standardGestures = frame.Gestures();
-
-                foreach (Leap.Gesture gesture in standardGestures)
+                if (gesture.State.Equals(Leap.Gesture.GestureState.STATESTOP))
                 {
-                    if (gesture.State.Equals(Leap.Gesture.GestureState.STATESTOP))
+                    if (gesture.Type.Equals(Leap.Gesture.GestureType.TYPESWIPE))
                     {
-                        if (gesture.Type.Equals(Leap.Gesture.GestureType.TYPESWIPE))
-                        {
-                            Print("Detected Swipe");
-                        }
+                        Print("Swipe Detected");
+                        Leap.SwipeGesture swipe = new Leap.SwipeGesture(gesture);
+                        SwipeEvent swipeEvent = new SwipeEvent(swipe);
+                        OnSwipeDetected(swipeEvent);
                     }
                 }
             }
         }
 
-        private static void Print(String output)
+        protected virtual void OnSwipeDetected(SwipeEvent swipe)
+        {
+            EventHandler<SwipeEvent> handler = SwipeDetected;
+
+            if (handler != null)
+            {
+                Print("Swipe Event Called");
+                handler(this, swipe);
+            }
+        }
+
+        private void Print(String output)
         {
             lock (consoleLock)
             {
@@ -64,7 +74,7 @@ namespace LeapMotionGestureMap
 
         static void Main()
         {
-            Init();
+            GestureMap map  = new GestureMap();
 
             Console.ReadKey();
         }

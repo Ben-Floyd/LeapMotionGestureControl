@@ -14,13 +14,11 @@ namespace LeapMotionPowerPointAdd_in
     public partial class LeapAddIn
     {
         private static readonly object slideShowLock = new object();
-        private bool slideShowRunnning;
-        private Thread show;
+        private LeapMotionGestureMap.GestureMap gestureMap;
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
-            slideShowRunnning = false;
-            LeapMotionGestureMap.GestureMap.Init();
+            gestureMap = new LeapMotionGestureMap.GestureMap();
 
             Application.SlideShowBegin +=
                 new PowerPoint.EApplication_SlideShowBeginEventHandler(SlideShowStart);
@@ -33,60 +31,36 @@ namespace LeapMotionPowerPointAdd_in
         {
         }
 
+        void HandleSwipe(object sender, LeapMotionGestureMap.SwipeEvent swipe)
+        {
+            Print("Swipe Event Received");
+
+            if (swipe.Swipe.Direction.x > 0)
+            {
+                Print("Next");
+                Application.ActivePresentation.SlideShowWindow.View.Next();
+            }
+            else
+            {
+                Print("Prev");
+                Application.ActivePresentation.SlideShowWindow.View.Previous();
+            }
+        }
+
         void SlideShowStart(PowerPoint.SlideShowWindow window)
         {
-            slideShowRunnning = true;
-            show = new Thread(slideShow);
-            show.Start();
+            gestureMap.SwipeDetected += HandleSwipe;
         }
 
         void SlideShowEnd(PowerPoint.Presentation presentation)
         {
-            Debug.WriteLine("Slide Show Ended");
-            slideShowRunnning = false;
-            show.Join();
+            Print("Slide Show Ended");
+            gestureMap.SwipeDetected -= HandleSwipe;
         }
 
-        void slideShow ()
+        void Print(string message)
         {
-            lock (slideShowLock)
-            {
-                while (slideShowRunnning)
-                {
-                    Leap.GestureList gestures = LeapMotionGestureMap.GestureMap.GetGestures();
-                    if ((gestures != null)
-                        && !(gestures.IsEmpty))
-                    {
-                        foreach (Leap.Gesture gesture in gestures)
-                        {
-                            HandleGesture(gesture);
-                        }
-                    }
-                }
-            }
-        }
-
-        void HandleGesture(Leap.Gesture gesture)
-        {
-            if (gesture.Type.Equals(Leap.Gesture.GestureType.TYPE_SWIPE))
-            {
-                Leap.SwipeGesture swipe = new Leap.SwipeGesture(gesture);
-
-                if (gesture.State.Equals(Leap.Gesture.GestureState.STATESTOP))
-                {
-                    Debug.WriteLine("SWIPE");
-                    if (swipe.Direction.x > 0)
-                    {
-                        Debug.WriteLine("Next");
-                        Application.ActivePresentation.SlideShowWindow.View.Next();
-                    }
-                    else
-                    {
-                        Debug.WriteLine("Prev");
-                        Application.ActivePresentation.SlideShowWindow.View.Previous();
-                    }
-                }
-            }
+            Debug.WriteLine("[PP] " + message);
         }
 
         #region VSTO generated code
