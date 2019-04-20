@@ -12,53 +12,79 @@ namespace LeapMotionGestureMap
     {
         private static readonly object consoleLock = new object();
 
-        private Leap.Controller controller = null;
-        private Leap.GestureList standardGestures;
-        public event EventHandler<SwipeEvent> SwipeDetected;
+        private Leap.Controller _controller = null;
+        private Leap.GestureList _standardGestures;
+        public event EventHandler<Events.FingerSwipeEvent> FingerSwipeDetected;
+        public event EventHandler<Events.HandSwipeEvent> HandSwipeDetected;
 
         public GestureMap()
         {
-            standardGestures = null;
-            controller = new Leap.Controller();
+            _standardGestures = null;
+            _controller = new Leap.Controller();
 
-            controller.EnableGesture(Leap.Gesture.GestureType.TYPE_SWIPE);
-            controller.AddListener(this);
+            _controller.EnableGesture(Leap.Gesture.GestureType.TYPE_SWIPE);
+            _controller.AddListener(this);
         }
 
         ~GestureMap()
         {
-            controller.RemoveListener(this);
-            controller.Dispose();
+            _controller.RemoveListener(this);
+            _controller.Dispose();
         }
 
         public override void OnFrame(Leap.Controller controller)
         {
             Leap.Frame frame = controller.Frame();
 
-            standardGestures = frame.Gestures();
+            _standardGestures = frame.Gestures();
 
-            foreach (Leap.Gesture gesture in standardGestures)
+            foreach (Leap.Gesture gesture in _standardGestures)
             {
                 if (gesture.State.Equals(Leap.Gesture.GestureState.STATESTOP))
                 {
                     if (gesture.Type.Equals(Leap.Gesture.GestureType.TYPESWIPE))
                     {
-                        Print("Swipe Detected");
+                        Print("Finger Swipe Detected");
                         Leap.SwipeGesture swipe = new Leap.SwipeGesture(gesture);
-                        SwipeEvent swipeEvent = new SwipeEvent(swipe);
-                        OnSwipeDetected(swipeEvent);
+                        Events.FingerSwipeEvent swipeEvent = new Events.FingerSwipeEvent(swipe);
+                        OnFingerSwipeDetected(swipeEvent);
                     }
+                }
+            }
+
+            Gestures.HandSwipe handSwipe = Gestures.HandSwipe.IsHandSwipe(frame);
+            if (handSwipe != null)
+            {
+                //Print("Hand Swipe " + handSwipe.State.ToString());
+                
+                if (handSwipe.State.Equals(Gestures.GestureState.END))
+                {
+                    Print("Hand Swipe Detected");
+
+                    Events.HandSwipeEvent swipeEvent = new Events.HandSwipeEvent(handSwipe);
+                    OnHandSwipeDetected(swipeEvent);
                 }
             }
         }
 
-        protected virtual void OnSwipeDetected(SwipeEvent swipe)
+        protected virtual void OnFingerSwipeDetected(Events.FingerSwipeEvent swipe)
         {
-            EventHandler<SwipeEvent> handler = SwipeDetected;
+            EventHandler<Events.FingerSwipeEvent> handler = FingerSwipeDetected;
 
             if (handler != null)
             {
-                Print("Swipe Event Called");
+                Print("Finger Swipe Event Called");
+                handler(this, swipe);
+            }
+        }
+
+        protected virtual void OnHandSwipeDetected(Events.HandSwipeEvent swipe)
+        {
+            EventHandler<Events.HandSwipeEvent> handler = HandSwipeDetected;
+
+            if (handler != null)
+            {
+                Print("Finger Swipe Event Called");
                 handler(this, swipe);
             }
         }

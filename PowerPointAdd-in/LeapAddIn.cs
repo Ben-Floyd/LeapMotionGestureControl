@@ -10,15 +10,14 @@ using Office = Microsoft.Office.Core;
 
 namespace LeapMotionPowerPointAdd_in
 {
-
     public partial class LeapAddIn
     {
-        private static readonly object slideShowLock = new object();
-        private LeapMotionGestureMap.GestureMap gestureMap;
+        private static readonly object _slideShowLock = new object();
+        private LeapMotionGestureMap.GestureMap _gestureMap;
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
-            gestureMap = new LeapMotionGestureMap.GestureMap();
+            _gestureMap = new LeapMotionGestureMap.GestureMap();
 
             Application.SlideShowBegin +=
                 new PowerPoint.EApplication_SlideShowBeginEventHandler(SlideShowStart);
@@ -31,11 +30,28 @@ namespace LeapMotionPowerPointAdd_in
         {
         }
 
-        void HandleSwipe(object sender, LeapMotionGestureMap.SwipeEvent swipe)
+        void HandleFingerSwipe(object sender, LeapMotionGestureMap.Events.FingerSwipeEvent swipe)
         {
-            Print("Swipe Event Received");
+            Print("Finger Swipe Event Received");
 
             if (swipe.Swipe.Direction.x > 0)
+            {
+                Print("Finger Next");
+                //Application.ActivePresentation.SlideShowWindow.View.Next();
+            }
+            else
+            {
+                Print("Finger Prev");
+                //Application.ActivePresentation.SlideShowWindow.View.Previous();
+            }
+        }
+
+        void HandleHandSwipe(object sender, LeapMotionGestureMap.Events.HandSwipeEvent swipe)
+        {
+            Print("Hand Swipe Event Recieved");
+
+            if (swipe.Swipe.Direction.Equals(
+                LeapMotionGestureMap.Gestures.HandSwipe.SwipeDirection.RIGHT))
             {
                 Print("Next");
                 Application.ActivePresentation.SlideShowWindow.View.Next();
@@ -49,13 +65,15 @@ namespace LeapMotionPowerPointAdd_in
 
         void SlideShowStart(PowerPoint.SlideShowWindow window)
         {
-            gestureMap.SwipeDetected += HandleSwipe;
+            _gestureMap.FingerSwipeDetected += HandleFingerSwipe;
+            _gestureMap.HandSwipeDetected += HandleHandSwipe;
         }
 
         void SlideShowEnd(PowerPoint.Presentation presentation)
         {
             Print("Slide Show Ended");
-            gestureMap.SwipeDetected -= HandleSwipe;
+            _gestureMap.FingerSwipeDetected -= HandleFingerSwipe;
+            _gestureMap.HandSwipeDetected -= HandleHandSwipe;
         }
 
         void Print(string message)
