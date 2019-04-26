@@ -14,6 +14,7 @@ namespace LeapMotionPowerPointAdd_in
     {
         private static readonly object _slideShowLock = new object();
         private LeapMotionGestureMap.GestureMap _gestureMap;
+        private bool _gPressed = false;
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
@@ -30,50 +31,70 @@ namespace LeapMotionPowerPointAdd_in
         {
         }
 
-        void HandleFingerSwipe(object sender, LeapMotionGestureMap.Events.FingerSwipeEvent swipe)
+        void SlideShowStart(PowerPoint.SlideShowWindow window)
         {
-            Print("Finger Swipe Event Received");
+            _gestureMap.HandSwipeDetected += HandleHandSwipe;
+            _gestureMap.CircleDetected += HandleCircle;
+        }
 
-            if (swipe.Swipe.Direction.x > 0)
-            {
-                Print("Finger Next");
-                //Application.ActivePresentation.SlideShowWindow.View.Next();
-            }
-            else
-            {
-                Print("Finger Prev");
-                //Application.ActivePresentation.SlideShowWindow.View.Previous();
-            }
+        void SlideShowEnd(PowerPoint.Presentation presentation)
+        {
+            Print("Slide Show Ended");
+            _gestureMap.HandSwipeDetected -= HandleHandSwipe;
+            _gestureMap.CircleDetected -= HandleCircle;
         }
 
         void HandleHandSwipe(object sender, LeapMotionGestureMap.Events.HandSwipeEvent swipe)
         {
             Print("Hand Swipe Event Recieved");
 
+            Thread.CurrentThread.SetApartmentState(ApartmentState.STA);//allow access to UI
+
             if (swipe.Swipe.Direction.Equals(
                 LeapMotionGestureMap.Gestures.HandSwipe.SwipeDirection.RIGHT))
             {
                 Print("Next");
-                Application.ActivePresentation.SlideShowWindow.View.Next();
+                if (_gPressed)
+                {
+                    System.Windows.Forms.SendKeys.SendWait("{RIGHT}");
+                }
+                else
+                {
+                    Application.ActivePresentation.SlideShowWindow.View.Next();
+                }
             }
             else
             {
                 Print("Prev");
-                Application.ActivePresentation.SlideShowWindow.View.Previous();
+                if (_gPressed)
+                {
+                    System.Windows.Forms.SendKeys.SendWait("{LEFT}");
+                }
+                else
+                {
+                    Application.ActivePresentation.SlideShowWindow.View.Previous();
+                }
             }
         }
 
-        void SlideShowStart(PowerPoint.SlideShowWindow window)
+        void HandleCircle(object sender, LeapMotionGestureMap.Events.CircleEvent circle)
         {
-            _gestureMap.FingerSwipeDetected += HandleFingerSwipe;
-            _gestureMap.HandSwipeDetected += HandleHandSwipe;
-        }
+            Print("Circle Event Recieved");
 
-        void SlideShowEnd(PowerPoint.Presentation presentation)
-        {
-            Print("Slide Show Ended");
-            _gestureMap.FingerSwipeDetected -= HandleFingerSwipe;
-            _gestureMap.HandSwipeDetected -= HandleHandSwipe;
+            Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
+
+                if (_gPressed)
+                {
+                    Print("Pressed Enter");
+                    System.Windows.Forms.SendKeys.SendWait("{ENTER}");
+                    _gPressed = false;
+                }
+                else
+                {
+                    Print("Pressed G");
+                    System.Windows.Forms.SendKeys.SendWait("g");
+                    _gPressed = true;
+                }
         }
 
         void Print(string message)

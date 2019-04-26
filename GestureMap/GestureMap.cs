@@ -16,6 +16,7 @@ namespace LeapMotionGestureMap
         private Leap.GestureList _standardGestures;
         public event EventHandler<Events.FingerSwipeEvent> FingerSwipeDetected;
         public event EventHandler<Events.HandSwipeEvent> HandSwipeDetected;
+        public event EventHandler<Events.CircleEvent> CircleDetected;
 
         public GestureMap()
         {
@@ -23,6 +24,7 @@ namespace LeapMotionGestureMap
             _controller = new Leap.Controller();
 
             _controller.EnableGesture(Leap.Gesture.GestureType.TYPE_SWIPE);
+            _controller.EnableGesture(Leap.Gesture.GestureType.TYPE_CIRCLE);
             _controller.AddListener(this);
         }
 
@@ -48,6 +50,14 @@ namespace LeapMotionGestureMap
                         Leap.SwipeGesture swipe = new Leap.SwipeGesture(gesture);
                         Events.FingerSwipeEvent swipeEvent = new Events.FingerSwipeEvent(swipe);
                         OnFingerSwipeDetected(swipeEvent);
+                    }
+
+                    if (gesture.Type.Equals(Leap.Gesture.GestureType.TYPE_CIRCLE))
+                    {
+                        Print("Circle Gesture Detected");
+                        Leap.CircleGesture circle = new Leap.CircleGesture(gesture);
+                        Events.CircleEvent circleEvent = new Events.CircleEvent(circle);
+                        OnCircleDetected(circleEvent);
                     }
                 }
             }
@@ -78,13 +88,24 @@ namespace LeapMotionGestureMap
             }
         }
 
+        protected virtual void OnCircleDetected(Events.CircleEvent circle)
+        {
+            EventHandler<Events.CircleEvent> handler = CircleDetected;
+
+            if (handler != null)
+            {
+                Print("Circle Event Called");
+                handler(this, circle);
+            }
+        }
+
         protected virtual void OnHandSwipeDetected(Events.HandSwipeEvent swipe)
         {
             EventHandler<Events.HandSwipeEvent> handler = HandSwipeDetected;
 
             if (handler != null)
             {
-                Print("Finger Swipe Event Called");
+                Print("Hand Swipe Event Called");
                 handler(this, swipe);
             }
         }

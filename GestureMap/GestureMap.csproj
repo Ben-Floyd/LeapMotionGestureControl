@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\CircleEvent.cs" />
     <Compile Include="Events\HandSwipeEvent.cs" />
     <Compile Include="GestureMap.cs" />
     <Compile Include="Gestures\CustomGesture.cs" />
