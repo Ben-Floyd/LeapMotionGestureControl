@@ -15,6 +15,7 @@ namespace LeapMotionPowerPointAdd_in
         private static readonly object _slideShowLock = new object();
         private LeapMotionGestureMap.GestureMap _gestureMap;
         private bool _gPressed = false;
+        Thread mouseThread = null;
 
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
@@ -25,6 +26,8 @@ namespace LeapMotionPowerPointAdd_in
 
             Application.SlideShowEnd +=
                 new PowerPoint.EApplication_SlideShowEndEventHandler(SlideShowEnd);
+
+            mouseThread = new Thread(HandleMouse);
         }
 
         private void ThisAddIn_Shutdown(object sender, System.EventArgs e)
@@ -37,6 +40,7 @@ namespace LeapMotionPowerPointAdd_in
             _gestureMap.CircleDetected += HandleCircle;
             _gestureMap.ZoomInDetected += HandleZoomIn;
             _gestureMap.ZoomOutDetected += HandleZoomOut;
+            mouseThread.Start();
         }
 
         void SlideShowEnd(PowerPoint.Presentation presentation)
@@ -46,6 +50,7 @@ namespace LeapMotionPowerPointAdd_in
             _gestureMap.CircleDetected -= HandleCircle;
             _gestureMap.ZoomInDetected -= HandleZoomIn;
             _gestureMap.ZoomOutDetected -= HandleZoomOut;
+            mouseThread.Abort();
         }
 
         void HandleHandSwipe(object sender, LeapMotionGestureMap.Events.HandSwipeEvent swipeEvent)
@@ -86,6 +91,23 @@ namespace LeapMotionPowerPointAdd_in
             Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
 
             System.Windows.Forms.SendKeys.SendWait("^l");
+        }
+
+        void HandleMouse()
+        {
+            while (true)
+            {
+                Leap.Vector pointerPos = _gestureMap.PointerPosition;
+                System.Drawing.Rectangle screen = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
+
+                if (pointerPos.z < 0.1)
+                {
+                    System.Drawing.Point pos =
+                        new System.Drawing.Point((int)(pointerPos.x * screen.Width), (int)((1 - pointerPos.y) * screen.Height));
+
+                    System.Windows.Forms.Cursor.Position = pos;
+                }
+            }
         }
 
         void HandleZoomIn(object sender, LeapMotionGestureMap.Events.ZoomInEvent zoomInEvent)

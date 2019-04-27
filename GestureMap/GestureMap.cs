@@ -13,7 +13,9 @@ namespace LeapMotionGestureMap
         private static readonly object consoleLock = new object();
 
         private Leap.Controller _controller = null;
-        private Leap.GestureList _standardGestures;
+        private Leap.GestureList _standardGestures = null;
+        private Leap.Vector _pointerPosition = null;
+
         public event EventHandler<Events.FingerSwipeEvent> FingerSwipeDetected;
         public event EventHandler<Events.HandSwipeEvent> HandSwipeDetected;
         public event EventHandler<Events.CircleEvent> CircleDetected;
@@ -22,7 +24,6 @@ namespace LeapMotionGestureMap
 
         public GestureMap()
         {
-            _standardGestures = null;
             _controller = new Leap.Controller();
 
             _controller.EnableGesture(Leap.Gesture.GestureType.TYPE_SWIPE);
@@ -39,6 +40,10 @@ namespace LeapMotionGestureMap
         public override void OnFrame(Leap.Controller controller)
         {
             Leap.Frame frame = controller.Frame();
+
+            Leap.InteractionBox interactionBox = frame.InteractionBox;
+            _pointerPosition =
+                interactionBox.NormalizePoint(frame.Pointables.Frontmost.TipPosition);
 
             _standardGestures = frame.Gestures();
 
@@ -99,6 +104,11 @@ namespace LeapMotionGestureMap
                     OnZoomOutDetected(zoomOutEvent);
                 }
             }
+        }
+
+        public Leap.Vector PointerPosition
+        {
+            get { return _pointerPosition; }
         }
 
         protected virtual void OnFingerSwipeDetected(Events.FingerSwipeEvent swipe)
