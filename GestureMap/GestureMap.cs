@@ -17,6 +17,8 @@ namespace LeapMotionGestureMap
         public event EventHandler<Events.FingerSwipeEvent> FingerSwipeDetected;
         public event EventHandler<Events.HandSwipeEvent> HandSwipeDetected;
         public event EventHandler<Events.CircleEvent> CircleDetected;
+        public event EventHandler<Events.ZoomInEvent> ZoomInDetected;
+        public event EventHandler<Events.ZoomOutEvent> ZoomOutDetected;
 
         public GestureMap()
         {
@@ -65,14 +67,36 @@ namespace LeapMotionGestureMap
             Gestures.HandSwipe handSwipe = Gestures.HandSwipe.IsHandSwipe(frame);
             if (handSwipe != null)
             {
-                //Print("Hand Swipe " + handSwipe.State.ToString());
-                
                 if (handSwipe.State.Equals(Gestures.GestureState.END))
                 {
                     Print("Hand Swipe Detected");
 
                     Events.HandSwipeEvent swipeEvent = new Events.HandSwipeEvent(handSwipe);
                     OnHandSwipeDetected(swipeEvent);
+                }
+            }
+
+            Gestures.ZoomIn zoomIn = Gestures.ZoomIn.IsZoomIn(frame);
+            if (zoomIn != null)
+            {
+                if (zoomIn.State.Equals(Gestures.GestureState.END))
+                {
+                    Print("ZoomIn Detected");
+
+                    Events.ZoomInEvent zoomInEvent = new Events.ZoomInEvent(zoomIn);
+                    OnZoomInDetected(zoomInEvent);
+                }
+            }
+
+            Gestures.ZoomOut zoomOut = Gestures.ZoomOut.IsZoomOut(frame);
+            if (zoomOut != null)
+            {
+                if (zoomOut.State.Equals(Gestures.GestureState.END))
+                {
+                    Print("ZoomOut Detected");
+
+                    Events.ZoomOutEvent zoomOutEvent = new Events.ZoomOutEvent(zoomOut);
+                    OnZoomOutDetected(zoomOutEvent);
                 }
             }
         }
@@ -107,6 +131,28 @@ namespace LeapMotionGestureMap
             {
                 Print("Hand Swipe Event Called");
                 handler(this, swipe);
+            }
+        }
+
+        protected virtual void OnZoomInDetected(Events.ZoomInEvent zoomIn)
+        {
+            EventHandler<Events.ZoomInEvent> handler = ZoomInDetected;
+
+            if (handler != null)
+            {
+                Print("ZoomIn Event Called");
+                handler(this, zoomIn);
+            }
+        }
+
+        protected virtual void OnZoomOutDetected(Events.ZoomOutEvent zoomOut)
+        {
+            EventHandler<Events.ZoomOutEvent> handler = ZoomOutDetected;
+
+            if (handler != null)
+            {
+                Print("ZoomOut Event Called");
+                handler(this, zoomOut);
             }
         }
 

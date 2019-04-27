@@ -35,6 +35,8 @@ namespace LeapMotionPowerPointAdd_in
         {
             _gestureMap.HandSwipeDetected += HandleHandSwipe;
             _gestureMap.CircleDetected += HandleCircle;
+            _gestureMap.ZoomInDetected += HandleZoomIn;
+            _gestureMap.ZoomOutDetected += HandleZoomOut;
         }
 
         void SlideShowEnd(PowerPoint.Presentation presentation)
@@ -42,15 +44,16 @@ namespace LeapMotionPowerPointAdd_in
             Print("Slide Show Ended");
             _gestureMap.HandSwipeDetected -= HandleHandSwipe;
             _gestureMap.CircleDetected -= HandleCircle;
+            _gestureMap.ZoomInDetected -= HandleZoomIn;
+            _gestureMap.ZoomOutDetected -= HandleZoomOut;
         }
 
-        void HandleHandSwipe(object sender, LeapMotionGestureMap.Events.HandSwipeEvent swipe)
+        void HandleHandSwipe(object sender, LeapMotionGestureMap.Events.HandSwipeEvent swipeEvent)
         {
             Print("Hand Swipe Event Recieved");
-
             Thread.CurrentThread.SetApartmentState(ApartmentState.STA);//allow access to UI
 
-            if (swipe.Swipe.Direction.Equals(
+            if (swipeEvent.Swipe.Direction.Equals(
                 LeapMotionGestureMap.Gestures.HandSwipe.SwipeDirection.RIGHT))
             {
                 Print("Next");
@@ -77,24 +80,38 @@ namespace LeapMotionPowerPointAdd_in
             }
         }
 
-        void HandleCircle(object sender, LeapMotionGestureMap.Events.CircleEvent circle)
+        void HandleCircle(object sender, LeapMotionGestureMap.Events.CircleEvent circleEvent)
         {
             Print("Circle Event Recieved");
-
             Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
 
-                if (_gPressed)
-                {
-                    Print("Pressed Enter");
-                    System.Windows.Forms.SendKeys.SendWait("{ENTER}");
-                    _gPressed = false;
-                }
-                else
-                {
-                    Print("Pressed G");
-                    System.Windows.Forms.SendKeys.SendWait("g");
-                    _gPressed = true;
-                }
+            System.Windows.Forms.SendKeys.SendWait("^l");
+        }
+
+        void HandleZoomIn(object sender, LeapMotionGestureMap.Events.ZoomInEvent zoomInEvent)
+        {
+            Print("ZoomIn Event Recieved");
+            Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
+
+            if (!_gPressed)
+            {
+                Print("Pressed G");
+                System.Windows.Forms.SendKeys.SendWait("g");
+                _gPressed = true;
+            }
+        }
+
+        void HandleZoomOut(object sender, LeapMotionGestureMap.Events.ZoomOutEvent zoomOutEvent)
+        {
+            Print("ZoomOut Event Recieved");
+            Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
+
+            if (_gPressed)
+            {
+                Print("Pressed Enter");
+                System.Windows.Forms.SendKeys.SendWait("{ENTER}");
+                _gPressed = false;
+            }
         }
 
         void Print(string message)
