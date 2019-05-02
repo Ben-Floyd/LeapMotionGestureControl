@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Events\CircleEvent.cs" />
     <Compile Include="Events\HandSwipeEvent.cs" />
+    <Compile Include="Events\ScreenTapEvent.cs" />
     <Compile Include="Events\ZoomInEvent.cs" />
     <Compile Include="Events\ZoomOutEvent.cs" />
     <Compile Include="GestureMap.cs" />

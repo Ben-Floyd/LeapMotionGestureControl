@@ -38,9 +38,12 @@ namespace LeapMotionPowerPointAdd_in
         void SlideShowStart(PowerPoint.SlideShowWindow window)
         {
             _gestureMap.HandSwipeDetected += HandleHandSwipe;
-            _gestureMap.CircleDetected += HandleCircle;
+            _gestureMap.ScreenTapDetected += HandleScreenTap;
             _gestureMap.ZoomInDetected += HandleZoomIn;
             _gestureMap.ZoomOutDetected += HandleZoomOut;
+
+            Application.ActivePresentation.SlideShowWindow.View.PointerType =
+                PowerPoint.PpSlideShowPointerType.ppSlideShowPointerAlwaysHidden;
 
             _mThreadRunning = true;
             _mouseThread.Start();
@@ -50,7 +53,7 @@ namespace LeapMotionPowerPointAdd_in
         {
             Print("Slide Show Ended");
             _gestureMap.HandSwipeDetected -= HandleHandSwipe;
-            _gestureMap.CircleDetected -= HandleCircle;
+            _gestureMap.ScreenTapDetected -= HandleScreenTap;
             _gestureMap.ZoomInDetected -= HandleZoomIn;
             _gestureMap.ZoomOutDetected -= HandleZoomOut;
 
@@ -91,12 +94,14 @@ namespace LeapMotionPowerPointAdd_in
             }
         }
 
-        void HandleCircle(object sender, LeapMotionGestureMap.Events.CircleEvent circleEvent)
+        void HandleScreenTap(object sender, LeapMotionGestureMap.Events.ScreenTapEvent screenTapEvent)
         {
-            Print("Circle Event Recieved");
+            Print("Screen Tap Event Recieved");
             Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
 
             System.Windows.Forms.SendKeys.SendWait("^l");
+            Application.ActivePresentation.SlideShowWindow.View.PointerType =
+                PowerPoint.PpSlideShowPointerType.ppSlideShowPointerAlwaysHidden;
         }
 
         void HandleMouse()
@@ -124,11 +129,11 @@ namespace LeapMotionPowerPointAdd_in
             Print("ZoomIn Event Recieved");
             Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
 
-            if (!_gPressed)
+            if (_gPressed)
             {
-                Print("Pressed G");
-                System.Windows.Forms.SendKeys.SendWait("g");
-                _gPressed = true;
+                Print("Pressed Enter");
+                System.Windows.Forms.SendKeys.SendWait("{ENTER}");
+                _gPressed = false;
             }
         }
 
@@ -137,11 +142,11 @@ namespace LeapMotionPowerPointAdd_in
             Print("ZoomOut Event Recieved");
             Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
 
-            if (_gPressed)
+            if (!_gPressed)
             {
-                Print("Pressed Enter");
-                System.Windows.Forms.SendKeys.SendWait("{ENTER}");
-                _gPressed = false;
+                Print("Pressed G");
+                System.Windows.Forms.SendKeys.SendWait("g");
+                _gPressed = true;
             }
         }
 

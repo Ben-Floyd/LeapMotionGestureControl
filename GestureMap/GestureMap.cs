@@ -21,6 +21,7 @@ namespace LeapMotionGestureMap
         public event EventHandler<Events.CircleEvent> CircleDetected;
         public event EventHandler<Events.ZoomInEvent> ZoomInDetected;
         public event EventHandler<Events.ZoomOutEvent> ZoomOutDetected;
+        public event EventHandler<Events.ScreenTapEvent> ScreenTapDetected;
 
         public GestureMap()
         {
@@ -28,6 +29,7 @@ namespace LeapMotionGestureMap
 
             _controller.EnableGesture(Leap.Gesture.GestureType.TYPE_SWIPE);
             _controller.EnableGesture(Leap.Gesture.GestureType.TYPE_CIRCLE);
+            _controller.EnableGesture(Leap.Gesture.GestureType.TYPE_SCREEN_TAP);
             _controller.AddListener(this);
         }
 
@@ -65,6 +67,14 @@ namespace LeapMotionGestureMap
                         Leap.CircleGesture circle = new Leap.CircleGesture(gesture);
                         Events.CircleEvent circleEvent = new Events.CircleEvent(circle);
                         OnCircleDetected(circleEvent);
+                    }
+
+                    if (gesture.Type.Equals(Leap.Gesture.GestureType.TYPE_SCREEN_TAP))
+                    {
+                        Print("Screen Tap Detected");
+                        Leap.ScreenTapGesture screenTap = new Leap.ScreenTapGesture(gesture);
+                        Events.ScreenTapEvent screenTapEvent = new Events.ScreenTapEvent(screenTap);
+                        OnScreenTapDetected(screenTapEvent);
                     }
                 }
             }
@@ -130,6 +140,17 @@ namespace LeapMotionGestureMap
             {
                 Print("Circle Event Called");
                 handler(this, circle);
+            }
+        }
+
+        protected virtual void OnScreenTapDetected(Events.ScreenTapEvent screenTap)
+        {
+            EventHandler<Events.ScreenTapEvent> handler = ScreenTapDetected;
+
+            if (handler != null)
+            {
+                Print("Screen Tap Event Called");
+                handler(this, screenTap);
             }
         }
 
