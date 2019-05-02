@@ -30,6 +30,7 @@ namespace LeapMotionGestureMap
             _controller.EnableGesture(Leap.Gesture.GestureType.TYPE_SWIPE);
             _controller.EnableGesture(Leap.Gesture.GestureType.TYPE_CIRCLE);
             _controller.EnableGesture(Leap.Gesture.GestureType.TYPE_SCREEN_TAP);
+            
             _controller.AddListener(this);
         }
 
@@ -142,7 +143,7 @@ namespace LeapMotionGestureMap
                 handler(this, circle);
             }
         }
-
+        
         protected virtual void OnScreenTapDetected(Events.ScreenTapEvent screenTap)
         {
             EventHandler<Events.ScreenTapEvent> handler = ScreenTapDetected;
@@ -153,7 +154,7 @@ namespace LeapMotionGestureMap
                 handler(this, screenTap);
             }
         }
-
+        
         protected virtual void OnHandSwipeDetected(Events.HandSwipeEvent swipe)
         {
             EventHandler<Events.HandSwipeEvent> handler = HandSwipeDetected;
