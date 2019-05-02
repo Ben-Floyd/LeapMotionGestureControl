@@ -191,9 +191,17 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GestureManager\GestureManager.csproj">
+      <Project>{00a2d73e-3f93-4671-ad5c-b433e232e82d}</Project>
+      <Name>GestureManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GestureMap\GestureMap.csproj">
       <Project>{57bfa5bb-8747-47a1-b16a-f60783c6b092}</Project>
       <Name>GestureMap</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Leap_OfficeLensLauncher\Leap_OfficeLensLauncher.csproj">
+      <Project>{7ed1abd3-e857-4fb3-826c-dcaea5d60a82}</Project>
+      <Name>Leap_OfficeLensLauncher</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
