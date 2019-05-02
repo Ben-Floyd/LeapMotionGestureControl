@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace LeapMotionGestureMap.Gestures
 {
-    public class HandSwipe : CustomGesture
+    public class ZoomOut : CustomGesture
     {
-        public enum SwipeDirection { LEFT, RIGHT };
-        private SwipeDirection _diretion;
-        private static HandSwipe other = null;
+        private static ZoomOut other = null;
 
-        public HandSwipe(CustomGestureType type, Leap.Frame frame)
-            :base(type, frame)
+        public ZoomOut(CustomGestureType type, Leap.Frame frame)
+            : base(type, frame)
         {
             if (other != null)
             {
@@ -32,17 +30,9 @@ namespace LeapMotionGestureMap.Gestures
             }
 
             other = this;
-
-            foreach(Leap.Hand hand in _handsForGesture)
-            {
-                if (hand.PalmVelocity.x > 0)
-                    _diretion = SwipeDirection.RIGHT;
-                else
-                    _diretion = SwipeDirection.LEFT;
-            }
         }
 
-        public static HandSwipe IsHandSwipe(Leap.Frame frame)
+        public static ZoomOut IsZoomOut(Leap.Frame frame)
         {
             if (frame.IsValid)
             {
@@ -50,35 +40,28 @@ namespace LeapMotionGestureMap.Gestures
 
                 if ((hands[0].IsValid && hands[1].IsValid) && handsTogether(hands[0], hands[1]))
                 {
-                    return null;
-                }
-
-                if (Math.Abs(hands.Frontmost.PalmVelocity.x) > 900)
-                {
-                    HandSwipe handSwipe = new HandSwipe(CustomGestureType.HAND_SWIPE, frame);
-                    return handSwipe;
-                }
-                else if ((other != null))
-                {
-                    if(other.State.Equals(GestureState.END) || other.State.Equals(GestureState.NA))
+                    if ((hands.Leftmost.PalmVelocity.x < 500) && (hands.Rightmost.PalmVelocity.x > -500))
                     {
-                        other._state = GestureState.NA;
-                        return other;
-                    }   
-                    else
+                        ZoomOut zoomOut = new ZoomOut(CustomGestureType.ZOOM_OUT, frame);
+                        return zoomOut;
+                    }
+                    else if (other != null)
                     {
-                        other._state = GestureState.END;
-                        return other;
+                        if (other.State.Equals(GestureState.END) || other.State.Equals(GestureState.NA))
+                        {
+                            other._state = GestureState.NA;
+                            return other;
+                        }
+                        else
+                        {
+                            other._state = GestureState.END;
+                            return other;
+                        }
                     }
                 }
             }
 
             return null;
-        }
-
-        public SwipeDirection Direction
-        {
-            get { return _diretion; }
         }
 
         private static bool handsTogether(Leap.Hand hand1, Leap.Hand hand2)
@@ -87,7 +70,6 @@ namespace LeapMotionGestureMap.Gestures
                 ydiff = Math.Abs(hand1.PalmPosition.y - hand2.PalmPosition.y),
                 zdiff = Math.Abs(hand1.PalmPosition.z - hand2.PalmPosition.z);
 
-            //Console.WriteLine("Pos diffs {0}", (xdiff + ydiff + zdiff));
             if ((xdiff + ydiff + zdiff) < 400)
                 return true;
 
