@@ -15,7 +15,7 @@ namespace LeapMotionGestureMap.Events
             _circle = circle;
         }
 
-        public Leap.CircleGesture Swipe
+        public Leap.CircleGesture Circle
         {
             get { return _circle; }
             set { _circle = value; }

@@ -13,18 +13,24 @@ namespace LeapMotionGestureMap
         private static readonly object consoleLock = new object();
 
         private Leap.Controller _controller = null;
-        private Leap.GestureList _standardGestures;
+        private Leap.GestureList _standardGestures = null;
+        private Leap.Vector _pointerPosition = null;
+
         public event EventHandler<Events.FingerSwipeEvent> FingerSwipeDetected;
         public event EventHandler<Events.HandSwipeEvent> HandSwipeDetected;
         public event EventHandler<Events.CircleEvent> CircleDetected;
+        public event EventHandler<Events.ZoomInEvent> ZoomInDetected;
+        public event EventHandler<Events.ZoomOutEvent> ZoomOutDetected;
+        public event EventHandler<Events.ScreenTapEvent> ScreenTapDetected;
 
         public GestureMap()
         {
-            _standardGestures = null;
             _controller = new Leap.Controller();
 
             _controller.EnableGesture(Leap.Gesture.GestureType.TYPE_SWIPE);
             _controller.EnableGesture(Leap.Gesture.GestureType.TYPE_CIRCLE);
+            _controller.EnableGesture(Leap.Gesture.GestureType.TYPE_SCREEN_TAP);
+            
             _controller.AddListener(this);
         }
 
@@ -37,6 +43,10 @@ namespace LeapMotionGestureMap
         public override void OnFrame(Leap.Controller controller)
         {
             Leap.Frame frame = controller.Frame();
+
+            Leap.InteractionBox interactionBox = frame.InteractionBox;
+            _pointerPosition =
+                interactionBox.NormalizePoint(frame.Pointables.Frontmost.TipPosition);
 
             _standardGestures = frame.Gestures();
 
@@ -59,14 +69,20 @@ namespace LeapMotionGestureMap
                         Events.CircleEvent circleEvent = new Events.CircleEvent(circle);
                         OnCircleDetected(circleEvent);
                     }
+
+                    if (gesture.Type.Equals(Leap.Gesture.GestureType.TYPE_SCREEN_TAP))
+                    {
+                        Print("Screen Tap Detected");
+                        Leap.ScreenTapGesture screenTap = new Leap.ScreenTapGesture(gesture);
+                        Events.ScreenTapEvent screenTapEvent = new Events.ScreenTapEvent(screenTap);
+                        OnScreenTapDetected(screenTapEvent);
+                    }
                 }
             }
 
             Gestures.HandSwipe handSwipe = Gestures.HandSwipe.IsHandSwipe(frame);
             if (handSwipe != null)
             {
-                //Print("Hand Swipe " + handSwipe.State.ToString());
-                
                 if (handSwipe.State.Equals(Gestures.GestureState.END))
                 {
                     Print("Hand Swipe Detected");
@@ -75,6 +91,35 @@ namespace LeapMotionGestureMap
                     OnHandSwipeDetected(swipeEvent);
                 }
             }
+
+            Gestures.ZoomIn zoomIn = Gestures.ZoomIn.IsZoomIn(frame);
+            if (zoomIn != null)
+            {
+                if (zoomIn.State.Equals(Gestures.GestureState.END))
+                {
+                    Print("ZoomIn Detected");
+
+                    Events.ZoomInEvent zoomInEvent = new Events.ZoomInEvent(zoomIn);
+                    OnZoomInDetected(zoomInEvent);
+                }
+            }
+
+            Gestures.ZoomOut zoomOut = Gestures.ZoomOut.IsZoomOut(frame);
+            if (zoomOut != null)
+            {
+                if (zoomOut.State.Equals(Gestures.GestureState.END))
+                {
+                    Print("ZoomOut Detected");
+
+                    Events.ZoomOutEvent zoomOutEvent = new Events.ZoomOutEvent(zoomOut);
+                    OnZoomOutDetected(zoomOutEvent);
+                }
+            }
+        }
+
+        public Leap.Vector PointerPosition
+        {
+            get { return _pointerPosition; }
         }
 
         protected virtual void OnFingerSwipeDetected(Events.FingerSwipeEvent swipe)
@@ -98,7 +143,18 @@ namespace LeapMotionGestureMap
                 handler(this, circle);
             }
         }
+        
+        protected virtual void OnScreenTapDetected(Events.ScreenTapEvent screenTap)
+        {
+            EventHandler<Events.ScreenTapEvent> handler = ScreenTapDetected;
 
+            if (handler != null)
+            {
+                Print("Screen Tap Event Called");
+                handler(this, screenTap);
+            }
+        }
+        
         protected virtual void OnHandSwipeDetected(Events.HandSwipeEvent swipe)
         {
             EventHandler<Events.HandSwipeEvent> handler = HandSwipeDetected;
@@ -107,6 +163,28 @@ namespace LeapMotionGestureMap
             {
                 Print("Hand Swipe Event Called");
                 handler(this, swipe);
+            }
+        }
+
+        protected virtual void OnZoomInDetected(Events.ZoomInEvent zoomIn)
+        {
+            EventHandler<Events.ZoomInEvent> handler = ZoomInDetected;
+
+            if (handler != null)
+            {
+                Print("ZoomIn Event Called");
+                handler(this, zoomIn);
+            }
+        }
+
+        protected virtual void OnZoomOutDetected(Events.ZoomOutEvent zoomOut)
+        {
+            EventHandler<Events.ZoomOutEvent> handler = ZoomOutDetected;
+
+            if (handler != null)
+            {
+                Print("ZoomOut Event Called");
+                handler(this, zoomOut);
             }
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LeapMotionGestureMap.Gestures
 {
-    public enum CustomGestureType { HAND_SWIPE };
+    public enum CustomGestureType { HAND_SWIPE, ZOOM_IN, ZOOM_OUT };
     public enum GestureState { NA, START, MIDDLE, END };
 
     public class CustomGesture
