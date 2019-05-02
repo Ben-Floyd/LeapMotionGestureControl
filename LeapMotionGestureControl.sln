@@ -10,12 +10,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PowerPointAdd-in", "PowerPo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestureMap", "GestureMap\GestureMap.csproj", "{57BFA5BB-8747-47A1-B16A-F60783C6B092}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestureManager", "GestureManager\GestureManager.csproj", "{00A2D73E-3F93-4671-AD5C-B433E232E82D}"
-	ProjectSection(ProjectDependencies) = postProject
-		{57BFA5BB-8747-47A1-B16A-F60783C6B092} = {57BFA5BB-8747-47A1-B16A-F60783C6B092}
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Leap_OfficeLensLauncher", "Leap_OfficeLensLauncher\Leap_OfficeLensLauncher.csproj", "{7ED1ABD3-E857-4FB3-826C-DCAEA5D60A82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestureManager", "GestureManager\GestureManager.csproj", "{19ABDAEF-DFCC-415D-8C83-6C068711DC87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,14 +28,14 @@ Global
 		{57BFA5BB-8747-47A1-B16A-F60783C6B092}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57BFA5BB-8747-47A1-B16A-F60783C6B092}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{57BFA5BB-8747-47A1-B16A-F60783C6B092}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{00A2D73E-3F93-4671-AD5C-B433E232E82D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{00A2D73E-3F93-4671-AD5C-B433E232E82D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{00A2D73E-3F93-4671-AD5C-B433E232E82D}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{00A2D73E-3F93-4671-AD5C-B433E232E82D}.Release|Any CPU.Build.0 = Debug|Any CPU
 		{7ED1ABD3-E857-4FB3-826C-DCAEA5D60A82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7ED1ABD3-E857-4FB3-826C-DCAEA5D60A82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7ED1ABD3-E857-4FB3-826C-DCAEA5D60A82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7ED1ABD3-E857-4FB3-826C-DCAEA5D60A82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19ABDAEF-DFCC-415D-8C83-6C068711DC87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19ABDAEF-DFCC-415D-8C83-6C068711DC87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19ABDAEF-DFCC-415D-8C83-6C068711DC87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19ABDAEF-DFCC-415D-8C83-6C068711DC87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

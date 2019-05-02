@@ -66,10 +66,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GestureManager\GestureManager.csproj">
-      <Project>{00a2d73e-3f93-4671-ad5c-b433e232e82d}</Project>
-      <Name>GestureManager</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GestureMap\GestureMap.csproj">
       <Project>{57bfa5bb-8747-47a1-b16a-f60783c6b092}</Project>
       <Name>GestureMap</Name>

@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{00A2D73E-3F93-4671-AD5C-B433E232E82D}</ProjectGuid>
+    <ProjectGuid>{19ABDAEF-DFCC-415D-8C83-6C068711DC87}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>LeapMotionGestureManager</RootNamespace>
     <AssemblyName>LeapMotionGestureManager</AssemblyName>
