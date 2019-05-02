@@ -14,7 +14,7 @@
     <Setting Name="ZoomActive" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="LaserActive" Type="System.Boolean" Scope="User">
+    <Setting Name="LazerActive" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="PowerPointActive" Type="System.Boolean" Scope="User">

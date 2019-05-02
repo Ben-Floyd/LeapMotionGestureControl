@@ -1,5 +1,6 @@
 ﻿namespace LeapMotionGestureManager
 {
+
     partial class GestureManager
     {
         /// <summary>
@@ -30,29 +31,29 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GestureManager));
             this.panel1 = new System.Windows.Forms.Panel();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.LensBox = new System.Windows.Forms.CheckBox();
-            this.HandSwipeBox = new System.Windows.Forms.CheckBox();
-            this.ZoomBox = new System.Windows.Forms.CheckBox();
-            this.LaserBox = new System.Windows.Forms.CheckBox();
-            this.HandSwipeSlider = new System.Windows.Forms.TrackBar();
-            this.ZoomSlider = new System.Windows.Forms.TrackBar();
-            this.HandSwipeLabel = new System.Windows.Forms.Label();
+            this.ZoomText = new System.Windows.Forms.TextBox();
+            this.HandSwipeText = new System.Windows.Forms.TextBox();
             this.ZoomLabel = new System.Windows.Forms.Label();
-            this.HandSwipeSensitivity = new System.Windows.Forms.TextBox();
-            this.ZoomSensitivity = new System.Windows.Forms.TextBox();
+            this.HandSwipeLabel = new System.Windows.Forms.Label();
+            this.ZoomSlider = new System.Windows.Forms.TrackBar();
+            this.HandSwipeSlider = new System.Windows.Forms.TrackBar();
+            this.LaserBox = new System.Windows.Forms.CheckBox();
+            this.ZoomBox = new System.Windows.Forms.CheckBox();
+            this.HandSwipeBox = new System.Windows.Forms.CheckBox();
+            this.LeapBox = new System.Windows.Forms.CheckBox();
+            this.LensBox = new System.Windows.Forms.CheckBox();
             this.OKButton = new System.Windows.Forms.Button();
             this.CancelButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.HandSwipeSlider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomSlider)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.HandSwipeSlider)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.ZoomSensitivity);
-            this.panel1.Controls.Add(this.HandSwipeSensitivity);
+            this.panel1.Controls.Add(this.ZoomText);
+            this.panel1.Controls.Add(this.HandSwipeText);
             this.panel1.Controls.Add(this.ZoomLabel);
             this.panel1.Controls.Add(this.HandSwipeLabel);
             this.panel1.Controls.Add(this.ZoomSlider);
@@ -64,58 +65,65 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(781, 492);
             this.panel1.TabIndex = 1;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
-            // checkBox1
+            // ZoomText
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(335, 53);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(210, 36);
-            this.checkBox1.TabIndex = 2;
-            this.checkBox1.Text = "Leap Motion";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged_1);
+            this.ZoomText.Location = new System.Drawing.Point(649, 315);
+            this.ZoomText.Name = "ZoomText";
+            this.ZoomText.Size = new System.Drawing.Size(100, 38);
+            this.ZoomText.TabIndex = 12;
+            this.ZoomText.Text = "50%";
+            this.ZoomText.TextChanged += new System.EventHandler(this.ZoomText_TextChanged);
             // 
-            // LensBox
+            // HandSwipeText
             // 
-            this.LensBox.AutoSize = true;
-            this.LensBox.Checked = true;
-            this.LensBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.LensBox.Location = new System.Drawing.Point(973, 328);
-            this.LensBox.Name = "LensBox";
-            this.LensBox.Size = new System.Drawing.Size(213, 36);
-            this.LensBox.TabIndex = 3;
-            this.LensBox.Text = "Office Lense";
-            this.LensBox.UseVisualStyleBackColor = true;
-            this.LensBox.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged_1);
+            this.HandSwipeText.AcceptsReturn = true;
+            this.HandSwipeText.Location = new System.Drawing.Point(659, 147);
+            this.HandSwipeText.Name = "HandSwipeText";
+            this.HandSwipeText.Size = new System.Drawing.Size(100, 38);
+            this.HandSwipeText.TabIndex = 11;
+            this.HandSwipeText.Text = "50%";
+            this.HandSwipeText.TextChanged += new System.EventHandler(this.HandSwipeSensitivity_TextChanged);
             // 
-            // HandSwipeBox
+            // ZoomLabel
             // 
-            this.HandSwipeBox.AutoSize = true;
-            this.HandSwipeBox.Checked = true;
-            this.HandSwipeBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.HandSwipeBox.Location = new System.Drawing.Point(62, 78);
-            this.HandSwipeBox.Name = "HandSwipeBox";
-            this.HandSwipeBox.Size = new System.Drawing.Size(361, 36);
-            this.HandSwipeBox.TabIndex = 4;
-            this.HandSwipeBox.Text = "Next Slide (Hand Swipe)";
-            this.HandSwipeBox.UseVisualStyleBackColor = true;
-            this.HandSwipeBox.CheckedChanged += new System.EventHandler(this.HandSwipeBox_CheckedChanged);
+            this.ZoomLabel.AutoSize = true;
+            this.ZoomLabel.Location = new System.Drawing.Point(18, 321);
+            this.ZoomLabel.Name = "ZoomLabel";
+            this.ZoomLabel.Size = new System.Drawing.Size(145, 32);
+            this.ZoomLabel.TabIndex = 10;
+            this.ZoomLabel.Text = "Sensitivity";
             // 
-            // ZoomBox
+            // HandSwipeLabel
             // 
-            this.ZoomBox.AutoSize = true;
-            this.ZoomBox.Checked = true;
-            this.ZoomBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.ZoomBox.Location = new System.Drawing.Point(62, 250);
-            this.ZoomBox.Name = "ZoomBox";
-            this.ZoomBox.Size = new System.Drawing.Size(403, 36);
-            this.ZoomBox.TabIndex = 5;
-            this.ZoomBox.Text = "All Slide View (Pinch Zoom)";
-            this.ZoomBox.UseVisualStyleBackColor = true;
-            this.ZoomBox.CheckedChanged += new System.EventHandler(this.ZoomBox_CheckedChanged);
+            this.HandSwipeLabel.AutoSize = true;
+            this.HandSwipeLabel.Location = new System.Drawing.Point(18, 147);
+            this.HandSwipeLabel.Name = "HandSwipeLabel";
+            this.HandSwipeLabel.Size = new System.Drawing.Size(145, 32);
+            this.HandSwipeLabel.TabIndex = 9;
+            this.HandSwipeLabel.Text = "Sensitivity";
+            // 
+            // ZoomSlider
+            // 
+            this.ZoomSlider.Location = new System.Drawing.Point(169, 299);
+            this.ZoomSlider.Maximum = 100;
+            this.ZoomSlider.Name = "ZoomSlider";
+            this.ZoomSlider.Size = new System.Drawing.Size(474, 114);
+            this.ZoomSlider.TabIndex = 8;
+            this.ZoomSlider.Value = 50;
+            this.ZoomSlider.Scroll += new System.EventHandler(this.trackBar2_Scroll);
+            // 
+            // HandSwipeSlider
+            // 
+            this.HandSwipeSlider.Location = new System.Drawing.Point(169, 130);
+            this.HandSwipeSlider.Maximum = 100;
+            this.HandSwipeSlider.Name = "HandSwipeSlider";
+            this.HandSwipeSlider.Size = new System.Drawing.Size(474, 114);
+            this.HandSwipeSlider.SmallChange = 5;
+            this.HandSwipeSlider.TabIndex = 7;
+            this.HandSwipeSlider.Value = 50;
+            this.HandSwipeSlider.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
             // LaserBox
             // 
@@ -130,62 +138,57 @@
             this.LaserBox.UseVisualStyleBackColor = true;
             this.LaserBox.CheckedChanged += new System.EventHandler(this.LaserBox_CheckedChanged);
             // 
-            // HandSwipeSlider
+            // ZoomBox
             // 
-            this.HandSwipeSlider.Location = new System.Drawing.Point(169, 130);
-            this.HandSwipeSlider.Maximum = 100;
-            this.HandSwipeSlider.Name = "HandSwipeSlider";
-            this.HandSwipeSlider.Size = new System.Drawing.Size(474, 114);
-            this.HandSwipeSlider.SmallChange = 5;
-            this.HandSwipeSlider.TabIndex = 7;
-            this.HandSwipeSlider.Value = 50;
-            this.HandSwipeSlider.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            this.ZoomBox.AutoSize = true;
+            this.ZoomBox.Checked = true;
+            this.ZoomBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.ZoomBox.Location = new System.Drawing.Point(62, 250);
+            this.ZoomBox.Name = "ZoomBox";
+            this.ZoomBox.Size = new System.Drawing.Size(403, 36);
+            this.ZoomBox.TabIndex = 5;
+            this.ZoomBox.Text = "All Slide View (Pinch Zoom)";
+            this.ZoomBox.UseVisualStyleBackColor = true;
+            this.ZoomBox.CheckedChanged += new System.EventHandler(this.ZoomBox_CheckedChanged);
             // 
-            // ZoomSlider
+            // HandSwipeBox
             // 
-            this.ZoomSlider.Location = new System.Drawing.Point(169, 299);
-            this.ZoomSlider.Maximum = 100;
-            this.ZoomSlider.Name = "ZoomSlider";
-            this.ZoomSlider.Size = new System.Drawing.Size(474, 114);
-            this.ZoomSlider.TabIndex = 8;
-            this.ZoomSlider.Value = 50;
-            this.ZoomSlider.Scroll += new System.EventHandler(this.trackBar2_Scroll);
+            this.HandSwipeBox.AutoSize = true;
+            this.HandSwipeBox.Checked = true;
+            this.HandSwipeBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.HandSwipeBox.Location = new System.Drawing.Point(62, 78);
+            this.HandSwipeBox.Name = "HandSwipeBox";
+            this.HandSwipeBox.Size = new System.Drawing.Size(361, 36);
+            this.HandSwipeBox.TabIndex = 4;
+            this.HandSwipeBox.Text = "Next Slide (Hand Swipe)";
+            this.HandSwipeBox.UseVisualStyleBackColor = true;
+            this.HandSwipeBox.CheckedChanged += new System.EventHandler(this.HandSwipeBox_CheckedChanged);
             // 
-            // HandSwipeLabel
+            // LeapBox
             // 
-            this.HandSwipeLabel.AutoSize = true;
-            this.HandSwipeLabel.Location = new System.Drawing.Point(18, 147);
-            this.HandSwipeLabel.Name = "HandSwipeLabel";
-            this.HandSwipeLabel.Size = new System.Drawing.Size(145, 32);
-            this.HandSwipeLabel.TabIndex = 9;
-            this.HandSwipeLabel.Text = "Sensitivity";
+            this.LeapBox.AutoSize = true;
+            this.LeapBox.Checked = true;
+            this.LeapBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.LeapBox.Location = new System.Drawing.Point(335, 53);
+            this.LeapBox.Name = "LeapBox";
+            this.LeapBox.Size = new System.Drawing.Size(210, 36);
+            this.LeapBox.TabIndex = 2;
+            this.LeapBox.Text = "Leap Motion";
+            this.LeapBox.UseVisualStyleBackColor = true;
+            this.LeapBox.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged_1);
             // 
-            // ZoomLabel
+            // LensBox
             // 
-            this.ZoomLabel.AutoSize = true;
-            this.ZoomLabel.Location = new System.Drawing.Point(18, 321);
-            this.ZoomLabel.Name = "ZoomLabel";
-            this.ZoomLabel.Size = new System.Drawing.Size(145, 32);
-            this.ZoomLabel.TabIndex = 10;
-            this.ZoomLabel.Text = "Sensitivity";
-            // 
-            // HandSwipeSensitivity
-            // 
-            this.HandSwipeSensitivity.AcceptsReturn = true;
-            this.HandSwipeSensitivity.Location = new System.Drawing.Point(659, 147);
-            this.HandSwipeSensitivity.Name = "HandSwipeSensitivity";
-            this.HandSwipeSensitivity.Size = new System.Drawing.Size(100, 38);
-            this.HandSwipeSensitivity.TabIndex = 11;
-            this.HandSwipeSensitivity.Text = "50%";
-            this.HandSwipeSensitivity.TextChanged += new System.EventHandler(this.HandSwipeSensitivity_TextChanged);
-            // 
-            // ZoomSensitivity
-            // 
-            this.ZoomSensitivity.Location = new System.Drawing.Point(649, 315);
-            this.ZoomSensitivity.Name = "ZoomSensitivity";
-            this.ZoomSensitivity.Size = new System.Drawing.Size(100, 38);
-            this.ZoomSensitivity.TabIndex = 12;
-            this.ZoomSensitivity.Text = "50%";
+            this.LensBox.AutoSize = true;
+            this.LensBox.Checked = true;
+            this.LensBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.LensBox.Location = new System.Drawing.Point(973, 328);
+            this.LensBox.Name = "LensBox";
+            this.LensBox.Size = new System.Drawing.Size(213, 36);
+            this.LensBox.TabIndex = 3;
+            this.LensBox.Text = "Office Lense";
+            this.LensBox.UseVisualStyleBackColor = true;
+            this.LensBox.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged_1);
             // 
             // OKButton
             // 
@@ -218,7 +221,7 @@
             this.Controls.Add(this.CancelButton);
             this.Controls.Add(this.OKButton);
             this.Controls.Add(this.LensBox);
-            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.LeapBox);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -227,8 +230,8 @@
             this.Load += new System.EventHandler(this.GestureManager_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.HandSwipeSlider)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ZoomSlider)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.HandSwipeSlider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -237,7 +240,7 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox LeapBox;
         private System.Windows.Forms.CheckBox LensBox;
         private System.Windows.Forms.CheckBox LaserBox;
         private System.Windows.Forms.CheckBox ZoomBox;
@@ -245,8 +248,8 @@
         private System.Windows.Forms.TrackBar ZoomSlider;
         private System.Windows.Forms.TrackBar HandSwipeSlider;
         private System.Windows.Forms.Label HandSwipeLabel;
-        private System.Windows.Forms.TextBox ZoomSensitivity;
-        private System.Windows.Forms.TextBox HandSwipeSensitivity;
+        private System.Windows.Forms.TextBox ZoomText;
+        private System.Windows.Forms.TextBox HandSwipeText;
         private System.Windows.Forms.Label ZoomLabel;
         private System.Windows.Forms.Button OKButton;
         private System.Windows.Forms.Button CancelButton;
